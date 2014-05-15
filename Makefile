@@ -1,16 +1,16 @@
-TARGET_NAME=GitClient
+TARGET_NAME=GitMore
 
-OBJECTS=GitClient
+OBJECTS=Main
 
 
 
-INCLUDE_DIRS=~/ProgrammingLibraries/libgit2-0.20.0/include
-LIBRARY_DIRS=lib
+INCLUDE_DIRS=~/ProgrammingLibraries/libgit2-0.20.0/include /usr/include /usr/local/include
+LIBRARY_DIRS=lib /usr/lib /usr/local/lib
 LIBRARIES=curses git2
 MACROS=DEBUG
 
 BUILD_DIR=build
-OBJECT_DIR=$(BUILD_DIR)/object
+OBJECT_DIR=$(BUILD_DIR)/objects
 SOURCE_DIR=src
 
 CC=g++
@@ -26,14 +26,18 @@ LIBRARY_DIRS_FULL=$(LIBRARY_DIRS:%=-L%)
 LIBRARIES_FULL=$(LIBRARIES:%=-l%)
 MACROS_FULL=$(MACROS:%=-D%)
 
-CFLAGS=$(INCLUDE_DIRS_FULL) $(MACROS_FULL) -std=c++11
+CFLAGS=-c $(INCLUDE_DIRS_FULL) $(MACROS_FULL) -std=c++11
 LFLAGS=$(LIBRARY_DIRS_FULL) $(LIBRARIES_FULL) -std=c++11
 
-$(BUILD_DIR)/%.out: $(OBJECTS_FULL)
-	$(CC) -o $@ $(LFLAGS) $(OBJECTS_FULL)
 
-$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
-	$(CL) $(CFLAGS) $< -o $@
+
+all: $(BUILD_DIR) $(OBJECT_DIR) $(OBJECTS_FULL) $(TARGET_FULL)
+
+$(BUILD_DIR)/%.out: $(OBJECTS_FULL)
+	$(CL) -o $@ $(LFLAGS) $(OBJECTS_FULL)
+
+$(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.cpp
+	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
