@@ -48,7 +48,8 @@ void GitMore::keyPress(int chr) {
 
 void GitMore::main() {
 
-	setCurrentRepo("jhgfd");
+	git_threads_init();
+	setCurrentRepo("E:\\Repos\\TestRepo\\");
 	
 	while (itsState != GitMoreState::Closing) {
 
