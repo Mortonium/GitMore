@@ -30,7 +30,7 @@ public:
 	
 private:
 	std::thread* itsThread = nullptr;
-	std::atomic<GitMoreState> itsState = GitMoreState::None;
+	std::atomic<GitMoreState> itsState { GitMoreState::None };
 
 	std::queue<int> itsInputQueue;
 	std::mutex itsInputQueueMutex;

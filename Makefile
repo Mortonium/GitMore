@@ -1,10 +1,10 @@
 TARGET_NAME=GitMore
 
-OBJECTS=Main
+OBJECTS=Main GitMore
 
 
 
-INCLUDE_DIRS=~/ProgrammingLibraries/libgit2-0.20.0/include /usr/include /usr/local/include
+INCLUDE_DIRS=/Users/Alex/ProgrammingLibraries/libgit2-0.20.0/include /usr/include /usr/local/include
 LIBRARY_DIRS=lib /usr/lib /usr/local/lib
 LIBRARIES=curses git2
 MACROS=DEBUG
