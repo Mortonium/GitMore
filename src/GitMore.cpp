@@ -26,7 +26,7 @@ void GitMore::waitForThreadFinish() {
 	}
 }
 
-GitMoreState GitMore::getState() {
+GitMoreState GitMore::getState() const {
 	return itsState;
 }
 void GitMore::keyPress(int chr) {
@@ -48,6 +48,8 @@ void GitMore::keyPress(int chr) {
 
 void GitMore::main() {
 
+	setCurrentRepo("jhgfd");
+	
 	while (itsState != GitMoreState::Closing) {
 
 		itsInputQueueMutex.lock();
@@ -62,7 +64,23 @@ void GitMore::main() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 	}
+	
+}
 
+void GitMore::setCurrentRepo(std::string path) {
+	
+	git_repository* newRepo = nullptr;
+	int error = git_repository_open(&newRepo, path.c_str());
+	if (error) {
+		exit(error);
+	} else {
+		closeCurrentRepo();
+		itsCurrentRepo = newRepo;
+	}
+	
+}
+void GitMore::closeCurrentRepo() {
+	git_repository_free(itsCurrentRepo);
 }
 
 void GitMore::interpretCommand(std::string commandString) {

@@ -7,6 +7,7 @@
 #include <mutex>
 #include <atomic>
 #include <queue>
+#include <git2.h>
 
 enum class GitMoreState {
 	None,
@@ -23,7 +24,7 @@ public:
 	void run();
 	void waitForThreadFinish();
 
-	GitMoreState getState();
+	GitMoreState getState() const;
 
 	void keyPress(int chr);
 	
@@ -34,9 +35,15 @@ private:
 	std::queue<int> itsInputQueue;
 	std::mutex itsInputQueueMutex;
 
+	std::string itsCurrentRepoPath;
+	git_repository* itsCurrentRepo = nullptr;
+
 	std::vector<std::string> itsCommandTokens;
 
 	void main();
+
+	void setCurrentRepo(std::string path);
+	void closeCurrentRepo();
 
 	void interpretCommand(std::string commandString);
 
