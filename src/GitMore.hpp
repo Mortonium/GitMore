@@ -20,7 +20,7 @@ enum class GitMoreState {
 };
 
 class GitMore {
-	
+
 public:
 	GitMore();
 	~GitMore();
@@ -31,12 +31,12 @@ public:
 	GitMoreState getState() const;
 
 	void keyPress(int chr);
-	
+
 
 
 private:
 	std::thread* itsThread = nullptr;
-	std::atomic<GitMoreState> itsState = GitMoreState::None;
+	std::atomic<GitMoreState> itsState{ GitMoreState::None };
 	Repository* itsCurrentRepository = nullptr;
 
 	std::queue<int> itsInputQueue;
@@ -58,5 +58,5 @@ private:
 	void interpretCommand(std::string commandString);
 
 	void draw();
-	
+
 };
