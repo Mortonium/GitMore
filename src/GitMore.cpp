@@ -30,21 +30,18 @@ GitMoreState GitMore::getState() const {
 	return itsState;
 }
 void GitMore::keyPress(int chr) {
-	switch (chr) {
-	case 27: // ESC
-		itsState = GitMoreState::Closing;
-		break;
-	default:
-		itsInputQueueMutex.lock();
-		itsInputQueue.push(chr);
-		itsInputQueueMutex.unlock();
-		break;
-	}
+	itsInputQueueMutex.lock();
+	itsInputQueue.push(chr);
+	itsInputQueueMutex.unlock();
 }
 
 
 
 
+
+void GitMore::setState(GitMoreState s) {
+	itsState = s;
+}
 
 void GitMore::main() {
 
@@ -58,7 +55,14 @@ void GitMore::main() {
 			itsInputQueueMutex.unlock(); 
 		else {
 			std::queue<int> cachedInputQueue = itsInputQueue;
+			while (!itsInputQueue.empty()) itsInputQueue.pop();
 			itsInputQueueMutex.unlock();
+
+			while (cachedInputQueue.size() > 0) {
+				int temp = cachedInputQueue.front();
+				interpretKeyPress(cachedInputQueue.front());
+				cachedInputQueue.pop();
+			}
 
 		}
 
@@ -66,6 +70,20 @@ void GitMore::main() {
 
 	}
 	
+}
+void GitMore::interpretKeyPress(int ch) {
+	if (ch == 27) {
+		setState(GitMoreState::Closing);
+	} else {
+		if (itsState == GitMoreState::None) {
+			if (ch == 9) { // TAB
+				enterCommandInputMode();
+			}
+		} else if (itsState == GitMoreState::CommandInput) {
+			commandModeKeyPress(ch);
+		}
+	}
+	//draw();
 }
 
 void GitMore::setCurrentRepo(std::string path) {
@@ -84,6 +102,32 @@ void GitMore::closeCurrentRepo() {
 	}
 }
 
+void GitMore::enterCommandInputMode() {
+	itsCommand = "";
+	setState(GitMoreState::CommandInput);
+	clear();
+	move(getmaxy(stdscr) - 2, 0);
+	for (int i = 0; i < getmaxx(stdscr); i++) {
+		//mvaddch(getmaxy(stdscr) - 2, i, '=');
+		addch('=');
+	}
+	move(getmaxy(stdscr) - 1, 0);
+	refresh();
+}
+void GitMore::commandModeKeyPress(int ch) {
+	if ((ch >= 32) && (ch <= 126)) {
+		itsCommand += (char)ch;
+		//mvaddch(getmaxy(stdscr) - 1, itsCommand.length() - 1, (char)ch);
+		addch((char)ch);
+	} else if (ch == 8) {
+		if (itsCommand.length() > 0) {
+			itsCommand.erase(itsCommand.end() - 1);
+			mvdelch(getmaxy(stdscr) - 1, itsCommand.length());
+		}
+	}
+	refresh();
+}
+
 void GitMore::interpretCommand(std::string commandString) {
 	
 }
@@ -91,9 +135,27 @@ void GitMore::interpretCommand(std::string commandString) {
 void GitMore::draw() {
 	clear();
 
-	if (itsCurrentRepository) {
-		mvprintw(0, 0, itsCurrentRepository->getPath().c_str());
-		//mvprintw(1, 0, "## %s\n", itsCurrentRepository->getCurrentBranchName()/.length() ? itsCurrentBranch.c_str() : "HEAD (no branch)");
+	std::string closeMessage = "Closing";
+
+	switch (itsState) {
+
+	case GitMoreState::None:
+		if (itsCurrentRepository) {
+			mvprintw(0, 0, itsCurrentRepository->getPath().c_str());
+			//mvprintw(1, 0, "## %s\n", itsCurrentRepository->getCurrentBranchName()/.length() ? itsCurrentBranch.c_str() : "HEAD (no branch)");
+		}
+		break;
+		
+	case GitMoreState::Closing:
+		mvprintw(getmaxy(stdscr) / 2, (getmaxx(stdscr) / 2) - (closeMessage.length() / 2), closeMessage.c_str());
+		break;
+
+	case GitMoreState::CommandInput:
+		for (int i = 0; i < getmaxx(stdscr); i++)
+			mvaddch(getmaxy(stdscr) - 2, i, '=');
+		mvprintw(getmaxy(stdscr) - 1, 0, itsCommand.c_str());
+		break;
+
 	}
 
 	refresh();

@@ -13,7 +13,8 @@ int main(int argc, char** argv) {
 	// raw(); // Disable line buffering, disable things like CTRL-Z
 	noecho(); // Stops user input from being echoed
 	keypad(stdscr, TRUE); // Enables function keys like F1, F2 and the arrow keys
-	timeout(100);
+	curs_set(0);
+	timeout(1000);
 
 	GitMore gitmore;
 	gitmore.run();
@@ -21,7 +22,8 @@ int main(int argc, char** argv) {
 	bool exit = false;
 	while (!exit) {
 		int ch = getch();
-		gitmore.keyPress(ch);
+		if (ch >= 0)
+			gitmore.keyPress(ch);
 		exit = gitmore.getState() == GitMoreState::Closing;
 	}
 

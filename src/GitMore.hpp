@@ -30,6 +30,8 @@ public:
 
 	void keyPress(int chr);
 	
+
+
 private:
 	std::thread* itsThread = nullptr;
 	std::atomic<GitMoreState> itsState = GitMoreState::None;
@@ -38,12 +40,21 @@ private:
 	std::queue<int> itsInputQueue;
 	std::mutex itsInputQueueMutex;
 
+	std::string itsCommand;
 	std::vector<std::string> itsCommandTokens;
 
+
+
+	void setState(GitMoreState s);
+
 	void main();
+	void interpretKeyPress(int ch);
 
 	void setCurrentRepo(std::string path);
 	void closeCurrentRepo();
+
+	void enterCommandInputMode();
+	void commandModeKeyPress(int ch);
 
 	void interpretCommand(std::string commandString);
 
