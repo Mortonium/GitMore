@@ -8,12 +8,7 @@ CLI::~CLI() {
 void CLI::init() {
 	itsCommand = "";
 	clear();
-	move(getmaxy(stdscr) - 2, 0);
-	for (int i = 0; i < getmaxx(stdscr); i++) {
-		//mvaddch(getmaxy(stdscr) - 2, i, '=');
-		addch('=');
-	}
-	//move(getmaxy(stdscr) - 1, 0);
+	mvhline(getmaxy(stdscr) - 2, 0, '-', COLS);
 	refresh();
 	itsInputWindow = newwin(1, COLS, getmaxy(stdscr) - 1, 0);
 	wmove(itsInputWindow, 0, 0);
