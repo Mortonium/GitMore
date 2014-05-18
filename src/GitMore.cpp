@@ -69,49 +69,18 @@ void GitMore::main() {
 }
 
 void GitMore::setCurrentRepo(std::string path) {
-	
-	git_repository* newRepo = nullptr;
-	int error = git_repository_open(&newRepo, path.c_str());
-	if (error) {
-		exit(error);
-	} else {
-		closeCurrentRepo();
-		itsCurrentRepo = newRepo;
-		itsCurrentRepoPath = path;
-		
-		/*
-		git_status_list* statusList = nullptr;
-		git_status_options o = GIT_STATUS_OPTIONS_INIT;
-		o.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
-		o.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED |
-			GIT_STATUS_OPT_RENAMES_HEAD_TO_INDEX |
-			GIT_STATUS_OPT_SORT_CASE_SENSITIVELY;
-		git_status_list_new(&statusList, itsCurrentRepo, 0);
-		*/
 
-		int error = 0;
-		git_reference *head = NULL;
+	Repository* newRepo = new Repository(path);
+	closeCurrentRepo();
+	itsCurrentRepository = newRepo;
 
-		error = git_repository_head(&head, itsCurrentRepo);
+	draw();
 
-		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND)
-			itsCurrentBranch = "";
-		else if (!error) {
-			itsCurrentBranch = std::string(git_reference_shorthand(head));
-		}
-
-		git_reference_free(head);
-		
-		draw();
-
-	}
-	
 }
 void GitMore::closeCurrentRepo() {
-	if (itsCurrentRepo) {
-		git_repository_free(itsCurrentRepo);
-		itsCurrentRepoPath = "";
-		itsCurrentRepo = nullptr;
+	if (itsCurrentRepository) {
+		delete itsCurrentRepository;
+		itsCurrentRepository = nullptr;
 	}
 }
 
@@ -122,9 +91,9 @@ void GitMore::interpretCommand(std::string commandString) {
 void GitMore::draw() {
 	clear();
 
-	if (itsCurrentRepo) {
-		mvprintw(0, 0, itsCurrentRepoPath.c_str());
-		mvprintw(1, 0, "## %s\n", itsCurrentBranch.length() ? itsCurrentBranch.c_str() : "HEAD (no branch)");
+	if (itsCurrentRepository) {
+		mvprintw(0, 0, itsCurrentRepository->getPath().c_str());
+		//mvprintw(1, 0, "## %s\n", itsCurrentRepository->getCurrentBranchName()/.length() ? itsCurrentBranch.c_str() : "HEAD (no branch)");
 	}
 
 	refresh();

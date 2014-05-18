@@ -9,6 +9,8 @@
 #include <queue>
 #include <git2.h>
 
+#include "Repository.hpp"
+
 enum class GitMoreState {
 	None,
 	Closing,
@@ -35,10 +37,6 @@ private:
 
 	std::queue<int> itsInputQueue;
 	std::mutex itsInputQueueMutex;
-
-	std::string itsCurrentRepoPath;
-	git_repository* itsCurrentRepo = nullptr;
-	std::string itsCurrentBranch;
 
 	std::vector<std::string> itsCommandTokens;
 
