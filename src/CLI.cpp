@@ -1,6 +1,9 @@
 #include "CLI.hpp"
 
 CLI::CLI() { }
+CLI::~CLI() {
+	delwin(itsInputWindow);
+}
 
 void CLI::init() {
 	itsCommand = "";
@@ -10,8 +13,10 @@ void CLI::init() {
 		//mvaddch(getmaxy(stdscr) - 2, i, '=');
 		addch('=');
 	}
-	move(getmaxy(stdscr) - 1, 0);
+	//move(getmaxy(stdscr) - 1, 0);
 	refresh();
+	itsInputWindow = newwin(1, COLS, getmaxy(stdscr) - 1, 0);
+	wmove(itsInputWindow, 0, 0);
 }
 
 void CLI::keyPress(chtype ch) {
@@ -19,16 +24,16 @@ void CLI::keyPress(chtype ch) {
 		if ((ch >= 32) && (ch <= 126)) {
 			itsCommand += (char)ch;
 			//mvaddch(getmaxy(stdscr) - 1, itsCommand.length() - 1, (char)ch);
-			addch((char)ch);
+			waddch(itsInputWindow, (char)ch);
 		} else if (ch == 8) { // Backspace
 			if (itsCommand.length() > 0) {
 				itsCommand.erase(itsCommand.end() - 1);
-				mvdelch(getmaxy(stdscr) - 1, itsCommand.length());
+				mvwdelch(itsInputWindow, getmaxy(stdscr) - 1, itsCommand.length());
 			}
 		} else if (ch == 10) { // Enter
 			itsFinished = true;
 		}
-		refresh();
+		wrefresh(itsInputWindow);
 	}
 }
 bool CLI::finished() {

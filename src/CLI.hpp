@@ -8,6 +8,7 @@ class CLI {
 
 public:
 	CLI();
+	~CLI();
 
 	void init();
 
@@ -16,7 +17,7 @@ public:
 	std::string getCommand();
 
 private:
-	WINDOW* itsWindow = nullptr;
+	WINDOW* itsInputWindow = nullptr;
 	bool itsFinished = false;
 
 	std::string itsCommand = "";
