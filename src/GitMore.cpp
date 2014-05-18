@@ -46,7 +46,7 @@ void GitMore::setState(GitMoreState s) {
 void GitMore::main() {
 
 	git_threads_init();
-	setCurrentRepo("E:\\Repos\\TestRepo\\");
+	setCurrentRepo("E:/Repos/TestRepo/");
 	
 	while (itsState != GitMoreState::Closing) {
 
@@ -54,6 +54,7 @@ void GitMore::main() {
 		if (itsInputQueue.empty())
 			itsInputQueueMutex.unlock(); 
 		else {
+
 			std::queue<int> cachedInputQueue = itsInputQueue;
 			while (!itsInputQueue.empty()) itsInputQueue.pop();
 			itsInputQueueMutex.unlock();
@@ -62,6 +63,12 @@ void GitMore::main() {
 				int temp = cachedInputQueue.front();
 				interpretKeyPress(cachedInputQueue.front());
 				cachedInputQueue.pop();
+			}
+
+			if (itsState == GitMoreState::CommandInput) {
+				if (itsCLI.finished()) {
+					executeCommandString(itsCLI.getCommand());
+				}
 			}
 
 		}
@@ -77,13 +84,13 @@ void GitMore::interpretKeyPress(int ch) {
 	} else {
 		if (itsState == GitMoreState::None) {
 			if (ch == 9) { // TAB
-				enterCommandInputMode();
+				setState(GitMoreState::CommandInput);
+				itsCLI.init();
 			}
 		} else if (itsState == GitMoreState::CommandInput) {
-			commandModeKeyPress(ch);
+			itsCLI.keyPress(ch);
 		}
 	}
-	//draw();
 }
 
 void GitMore::setCurrentRepo(std::string path) {
@@ -102,32 +109,10 @@ void GitMore::closeCurrentRepo() {
 	}
 }
 
-void GitMore::enterCommandInputMode() {
-	itsCommand = "";
-	setState(GitMoreState::CommandInput);
-	clear();
-	move(getmaxy(stdscr) - 2, 0);
-	for (int i = 0; i < getmaxx(stdscr); i++) {
-		//mvaddch(getmaxy(stdscr) - 2, i, '=');
-		addch('=');
-	}
-	move(getmaxy(stdscr) - 1, 0);
+void GitMore::executeCommandString(std::string commandString) {
+	mvprintw(0, 0, commandString.c_str());
 	refresh();
 }
-void GitMore::commandModeKeyPress(int ch) {
-	if ((ch >= 32) && (ch <= 126)) {
-		itsCommand += (char)ch;
-		//mvaddch(getmaxy(stdscr) - 1, itsCommand.length() - 1, (char)ch);
-		addch((char)ch);
-	} else if (ch == 8) {
-		if (itsCommand.length() > 0) {
-			itsCommand.erase(itsCommand.end() - 1);
-			mvdelch(getmaxy(stdscr) - 1, itsCommand.length());
-		}
-	}
-	refresh();
-}
-
 void GitMore::interpretCommand(std::string commandString) {
 	
 }
@@ -153,7 +138,7 @@ void GitMore::draw() {
 	case GitMoreState::CommandInput:
 		for (int i = 0; i < getmaxx(stdscr); i++)
 			mvaddch(getmaxy(stdscr) - 2, i, '=');
-		mvprintw(getmaxy(stdscr) - 1, 0, itsCommand.c_str());
+		//mvprintw(getmaxy(stdscr) - 1, 0, itsCommand.c_str());
 		break;
 
 	}

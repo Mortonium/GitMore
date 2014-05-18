@@ -11,6 +11,8 @@
 
 #include "Repository.hpp"
 
+#include "CLI.hpp"
+
 enum class GitMoreState {
 	None,
 	Closing,
@@ -40,8 +42,7 @@ private:
 	std::queue<int> itsInputQueue;
 	std::mutex itsInputQueueMutex;
 
-	std::string itsCommand;
-	std::vector<std::string> itsCommandTokens;
+	CLI itsCLI;
 
 
 
@@ -53,9 +54,7 @@ private:
 	void setCurrentRepo(std::string path);
 	void closeCurrentRepo();
 
-	void enterCommandInputMode();
-	void commandModeKeyPress(int ch);
-
+	void executeCommandString(std::string commandString);
 	void interpretCommand(std::string commandString);
 
 	void draw();
