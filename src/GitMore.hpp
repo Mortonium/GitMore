@@ -31,12 +31,14 @@ public:
 private:
 	std::thread* itsThread = nullptr;
 	std::atomic<GitMoreState> itsState = GitMoreState::None;
+	Repository* itsCurrentRepository = nullptr;
 
 	std::queue<int> itsInputQueue;
 	std::mutex itsInputQueueMutex;
 
 	std::string itsCurrentRepoPath;
 	git_repository* itsCurrentRepo = nullptr;
+	std::string itsCurrentBranch;
 
 	std::vector<std::string> itsCommandTokens;
 
