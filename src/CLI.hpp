@@ -4,6 +4,12 @@
 #include <string>
 #include <vector>
 
+enum class CommandTokenStatus {
+	Valid,
+	InvalidSyntax,
+	InvalidValue
+};
+
 class CLI {
 
 public:
@@ -21,6 +27,11 @@ private:
 	bool itsFinished = false;
 
 	std::string itsCommand = "";
+	std::string itsCurrentToken = "";
 	std::vector<std::string> itsCommandTokens;
+	std::vector<CommandTokenStatus> itsCommandTokenStatus;
+
+	void tokenizeCommand();
+	void checkTokenStatus();
 
 };
