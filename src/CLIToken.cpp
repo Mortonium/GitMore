@@ -66,5 +66,9 @@ int CLIToken::getEndIndex() {
 
 void CLIToken::drawToken(WINDOW* window, int row, int col) {
 	assert(inUse());
+	init_pair(1, COLOR_RED, COLOR_BLACK);
+	wattron(window, COLOR_PAIR(1));
 	mvwprintw(window, row, col, itsToken.c_str());
+	wrefresh(window);
+	wattroff(window, COLOR_PAIR(1));
 }

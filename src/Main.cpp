@@ -14,8 +14,10 @@ int main(int argc, char** argv) {
 	noecho(); // Stops user input from being echoed
 	keypad(stdscr, TRUE); // Enables function keys like F1, F2 and the arrow keys
 	curs_set(0);
+	if (has_colors())
+		start_color();
 	timeout(1000);
-
+	
 	GitMore gitmore;
 	gitmore.run();
 
