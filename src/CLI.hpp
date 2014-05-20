@@ -23,7 +23,7 @@ private:
 	bool itsFinished = false;
 
 	std::string itsCommand = "";
-	CLIToken itsCurrentCommandToken;
-	std::vector<CLIToken> itsCommandTokens;
+	CLIToken itsCurrentCLIToken;
+	std::vector<CLIToken> itsCLITokens;
 
 };
