@@ -25,5 +25,8 @@ private:
 	std::string itsCommand = "";
 	CLIToken itsCurrentCLIToken;
 	std::vector<CLIToken> itsCLITokens;
+	std::vector<std::string> itsNextValidTokens;
+
+	void pushCurrentCLIToken();
 
 };

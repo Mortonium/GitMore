@@ -1,5 +1,7 @@
 #include "CLI.hpp"
 
+#include <algorithm>
+
 CLI::CLI() { }
 CLI::~CLI() {
 	delwin(itsInputWindow);
@@ -27,8 +29,9 @@ void CLI::keyPress(chtype ch) {
 			waddch(itsInputWindow, (char)ch);
 		} else if (ch == 32) { // Space
 			if (itsCurrentCLIToken.inUse()) {
-				itsCLITokens.push_back(itsCurrentCLIToken);
-				itsCurrentCLIToken.clear();
+				// itsCLITokens.push_back(itsCurrentCLIToken);
+				// itsCurrentCLIToken.clear();
+				pushCurrentCLIToken();
 			}
 			itsCommand += (char)ch;
 			waddch(itsInputWindow, (char)ch);
@@ -56,4 +59,25 @@ bool CLI::finished() {
 }
 std::string CLI::getCommand() {
 	return itsCommand;
+}
+
+
+
+
+
+void CLI::pushCurrentCLIToken() {
+
+	itsCLITokens.push_back(itsCurrentCLIToken);
+	itsCurrentCLIToken.clear();
+
+	if (std::find(itsNextValidTokens.begin(), itsNextValidTokens.end(), itsCLITokens.back().getToken()) == itsNextValidTokens.end()) { // Not valid
+		itsCLITokens.back().setStatus(CommandTokenStatus::InvalidSyntax);
+		itsCLITokens.back().drawToken(itsInputWindow, 0, itsCLITokens.back().getStartIndex());
+	} else {
+		itsCLITokens.back().setStatus(CommandTokenStatus::Valid);
+		itsCLITokens.back().drawToken(itsInputWindow, 0, itsCLITokens.back().getStartIndex());
+	}
+
+	wmove(itsInputWindow, 0, itsCommand.length());
+
 }
