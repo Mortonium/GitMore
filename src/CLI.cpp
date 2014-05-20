@@ -17,24 +17,28 @@ void CLI::init() {
 void CLI::keyPress(chtype ch) {
 	if (!itsFinished) {
 		if ((ch >= 33) && (ch <= 126)) { // Character
-			itsCurrentToken += (char)ch;
+			if (itsCurrentCommandToken.inUse()) {
+				itsCurrentCommandToken.addCharacter((char)ch);
+			} else {
+				itsCurrentCommandToken = CLIToken((char)ch, itsCommand.length());
+			}
 			//mvaddch(getmaxy(stdscr) - 1, itsCommand.length() - 1, (char)ch);
 			itsCommand += (char)ch;
 			waddch(itsInputWindow, (char)ch);
 		} else if (ch == 32) { // Space
-			if (itsCurrentToken.length() > 0) {
-				itsCommandTokens.push_back(itsCurrentToken);
-				itsCurrentToken = "";
+			if (itsCurrentCommandToken.inUse()) {
+				itsCommandTokens.push_back(itsCurrentCommandToken);
+				itsCurrentCommandToken.clear();
 			}
 			itsCommand += (char)ch;
 			waddch(itsInputWindow, (char)ch);
 		} else if (ch == 8) { // Backspace
 			if (itsCommand.length() > 0) {
-				if (itsCurrentToken.length() > 0) {
-					itsCurrentToken.erase(itsCurrentToken.end() - 1);
+				if (itsCurrentCommandToken.inUse()) {
+					itsCurrentCommandToken.removeCharacter();
 				} else {
 					if ((itsCommand.length()) > 1 && (*(itsCommand.end() - 2) != ' ')) {
-						itsCurrentToken = itsCommandTokens.back();
+						itsCurrentCommandToken = itsCommandTokens.back();
 						itsCommandTokens.pop_back();
 					}
 				}
@@ -52,15 +56,4 @@ bool CLI::finished() {
 }
 std::string CLI::getCommand() {
 	return itsCommand;
-}
-
-void CLI::tokenizeCommand() {
-
-	std::string currentToken = "";
-	for (std::string::const_iterator iter = itsCommand.begin(); iter != itsCommand.end(); iter++) {
-
-	}
-}
-void CLI::checkTokenStatus() {
-
 }
