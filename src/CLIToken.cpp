@@ -2,6 +2,8 @@
 
 #include <assert.h>
 
+#include "ColorSettings.hpp"
+
 CLIToken::CLIToken() { }
 CLIToken::CLIToken(char token, int startIndex) {
 	itsStartIndex = startIndex;
@@ -66,9 +68,9 @@ int CLIToken::getEndIndex() {
 
 void CLIToken::drawToken(WINDOW* window, int row, int col) {
 	assert(inUse());
-	init_pair(1, COLOR_RED, COLOR_BLACK);
-	wattron(window, COLOR_PAIR(1));
+	//init_pair(1, COLOR_RED, COLOR_BLACK);
+	wattron(window, COLOR_PAIR(Colors::InvalidCLIToken));
 	mvwprintw(window, row, col, itsToken.c_str());
 	wrefresh(window);
-	wattroff(window, COLOR_PAIR(1));
+	wattroff(window, COLOR_PAIR(Colors::InvalidCLIToken));
 }

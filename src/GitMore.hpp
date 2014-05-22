@@ -11,6 +11,7 @@
 
 #include "Repository.hpp"
 
+#include "Settings.hpp"
 #include "CLI.hpp"
 
 enum class GitMoreState {
@@ -38,6 +39,7 @@ private:
 	std::thread* itsThread = nullptr;
 	std::atomic<GitMoreState> itsState{ GitMoreState::None };
 	Repository* itsCurrentRepository = nullptr;
+	Settings itsSettings;
 
 	std::queue<int> itsInputQueue;
 	std::mutex itsInputQueueMutex;
