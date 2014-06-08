@@ -3,6 +3,7 @@
 #include <curses.h>
 #include <string>
 #include <vector>
+#include <boost\spirit\include\qi.hpp>
 
 #include "CLIToken.hpp"
 
@@ -28,5 +29,7 @@ private:
 	std::vector<std::string> itsNextValidTokens;
 
 	void pushCurrentCLIToken();
+
+	void validateAllTokens();
 
 };

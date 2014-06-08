@@ -78,6 +78,28 @@ void CLI::pushCurrentCLIToken() {
 		itsCLITokens.back().drawToken(itsInputWindow, 0, itsCLITokens.back().getStartIndex());
 	}
 
+	validateAllTokens();
 	wmove(itsInputWindow, 0, itsCommand.length());
+
+}
+
+void CLI::validateAllTokens() {
+
+	using namespace boost::spirit;
+	
+	std::string::iterator first = itsCommand.begin();
+	std::string::iterator last = itsCommand.end();
+
+	bool r = qi::phrase_parse(
+		first,
+		last,
+		double_ >> *(',' >> double_),
+		qi::space
+		);
+	mvhline(4, 0, ' ', 40);
+	mvprintw(4, 0, "%s", std::string(itsCommand.begin(), first));
+	refresh();
+	//if (first != last) // fail if we did not get a full match
+		//return false;
 
 }
