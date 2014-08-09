@@ -21,7 +21,7 @@ namespace git {
 		};
 
 		reference(repository& repository);
-		reference(repository& repository, std::string name);
+		reference(repository& repository, git_reference* ref);
 		virtual ~reference();
 
 		type get_type();

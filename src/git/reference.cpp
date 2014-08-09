@@ -3,14 +3,9 @@
 git::reference::reference(repository& repository) : itsRepository(repository) {
 	
 }
-git::reference::reference(repository& repository, std::string name) : itsRepository(repository) {
+git::reference::reference(repository& repository, git_reference* ref) : itsRepository(repository) {
 	
-	int error = git_reference_lookup(&itsReference, itsRepository.get_repository(), name.c_str());
-
-	if (error == GIT_EINVALIDSPEC)
-		error = git_reference_dwim(&itsReference, itsRepository.get_repository(), name.c_str());
-	
-	if (!error) {
+	if (ref) {
 		itsLongName = std::string(git_reference_name(itsReference));
 		itsShortName = std::string(git_reference_shorthand(itsReference));
 		git_reference_name_to_id(&itsOID, itsRepository.get_repository(), itsLongName.c_str());
@@ -22,10 +17,6 @@ git::reference::reference(repository& repository, std::string name) : itsReposit
 			itsType = type::remote;
 		else if (git_reference_is_tag(itsReference))
 			itsType = type::tag;
-	} else {
-		const git_error *e = giterr_last();
-		printf("Error %d/%d: %s\n", error, e->klass, e->message);
-		exit(error);
 	}
 
 }
