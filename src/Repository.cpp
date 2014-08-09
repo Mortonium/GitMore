@@ -49,7 +49,9 @@ void Repository::open(std::string path) {
 		*/
 
 	} else {
-
+		const git_error *e = giterr_last();
+		printf("Error %d/%d: %s\n", error, e->klass, e->message);
+		exit(error);
 	}
 
 }
