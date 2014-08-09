@@ -17,27 +17,20 @@ void Repository::open(std::string path) {
 		close();
 	}
 
-	git_repository* newRepo = nullptr;
-	int error = git_repository_open(&newRepo, path.c_str());
+	int error = git_repository_open(&itsRepository, path.c_str());
 	if (!error) {
-		itsRepository = newRepo;
+
 		itsPath = path;
 
-
-		int error = 0;
-		git_reference *head = NULL;
-
-		error = git_repository_head(&head, itsRepository);
-
+		error = git_repository_head(&itsHead, itsRepository);
 		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND) {
 			const git_error *e = giterr_last();
 			printf("Error %d/%d: %s\n", error, e->klass, e->message);
 			exit(error);
 		} else if (!error) {
-			itsHead = head;
-			itsHeadName = std::string(git_reference_shorthand(head));
+			itsHeadName = std::string(git_reference_shorthand(itsHead));
 		}
-
+		
 		/*
 		git_status_list* statusList = nullptr;
 		git_status_options o = GIT_STATUS_OPTIONS_INIT;
