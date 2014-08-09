@@ -1,18 +1,18 @@
 #include "Repository.hpp"
 
-Repository::Repository() {
+git::repository::repository() {
 
 }
-Repository::Repository(std::string path) {
+git::repository::repository(std::string path) {
 	open(path);
 }
-Repository::~Repository() {
+git::repository::~repository() {
 	if (itsRepository) {
 		close();
 	}
 }
 
-void Repository::open(std::string path) {
+void git::repository::open(std::string path) {
 	if (itsRepository) {
 		close();
 	}
@@ -56,7 +56,7 @@ void Repository::open(std::string path) {
 	}
 
 }
-void Repository::close() {
+void git::repository::close() {
 
 	git_repository_free(itsRepository);
 	git_reference_free(itsHead);
@@ -69,6 +69,6 @@ void Repository::close() {
 
 }
 
-std::string Repository::getPath() {
+std::string git::repository::getPath() {
 	return itsPath;
 }

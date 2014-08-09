@@ -4,23 +4,27 @@
 
 #include <string>
 
-class Repository {
+namespace git {
 
-public:
-	Repository();
-	Repository(std::string path);
-	~Repository();
+	class repository {
 
-	void open(std::string path);
-	void close();
+	public:
+		repository();
+		repository(std::string path);
+		~repository();
 
-	std::string getPath();
+		void open(std::string path);
+		void close();
 
-private:
-	git_repository* itsRepository = nullptr;
-	git_reference* itsHead = nullptr;
+		std::string getPath();
 
-	std::string itsPath;
-	std::string itsHeadName;
+	private:
+		git_repository* itsRepository = nullptr;
+		git_reference* itsHead = nullptr;
 
-};
+		std::string itsPath;
+		std::string itsHeadName;
+
+	};
+
+}

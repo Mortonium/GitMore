@@ -95,7 +95,7 @@ void GitMore::interpretKeyPress(int ch) {
 
 void GitMore::setCurrentRepo(std::string path) {
 
-	Repository* newRepo = new Repository(path);
+	git::repository* newRepo = new git::repository(path);
 	closeCurrentRepo();
 	itsCurrentRepository = newRepo;
 

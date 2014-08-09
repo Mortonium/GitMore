@@ -38,7 +38,7 @@ public:
 private:
 	std::thread* itsThread = nullptr;
 	std::atomic<GitMoreState> itsState{ GitMoreState::None };
-	Repository* itsCurrentRepository = nullptr;
+	git::repository* itsCurrentRepository = nullptr;
 	Settings itsSettings;
 
 	std::queue<int> itsInputQueue;
