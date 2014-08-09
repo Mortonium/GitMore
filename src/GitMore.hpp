@@ -9,7 +9,7 @@
 #include <queue>
 #include <git2.h>
 
-#include "Repository.hpp"
+#include "git/repository.hpp"
 
 #include "Settings.hpp"
 #include "CLI.hpp"
