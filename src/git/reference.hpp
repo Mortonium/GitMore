@@ -4,9 +4,13 @@
 
 #include <string>
 
+#include "repository.hpp"
+
 namespace git {
 
 	class reference {
+		friend class git::reference;
+		friend class git::repository;
 
 	public:
 		enum class type {
@@ -16,12 +20,11 @@ namespace git {
 			tag
 		};
 
-		reference();
-		reference(std::string name);
+		reference(repository& repository);
+		reference(repository& repository, std::string name);
 		virtual ~reference() = 0;
 
-		int compare(const reference& other);
-		int compare(const git_reference* other);
+		int compare(git::reference& other);
 
 		void rename(std::string new_name);
 
@@ -31,10 +34,12 @@ namespace git {
 		git_reference* get_reference();
 
 	private:
-		git_reference* itsReference;
+		repository& itsRepository;
+		git_reference* itsReference = nullptr;
 
 		git_oid itsOID;
-		std::string itsFullName;
+		std::string itsLongName;
+		std::string itsShortName;
 
 	};
 

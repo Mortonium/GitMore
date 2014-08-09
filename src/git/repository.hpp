@@ -7,6 +7,7 @@
 namespace git {
 
 	class repository {
+		friend class reference;
 
 	public:
 		repository();
