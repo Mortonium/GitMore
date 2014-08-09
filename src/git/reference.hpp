@@ -24,6 +24,9 @@ namespace git {
 		reference(repository& repository, std::string name);
 		virtual ~reference();
 
+		std::string get_long_name() const;
+		std::string get_short_name() const;
+
 		int compare(git::reference& other);
 
 		void rename(std::string new_name);

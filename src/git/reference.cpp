@@ -26,6 +26,13 @@ git::reference::~reference() {
 		git_reference_free(itsReference);
 }
 
+std::string git::reference::get_long_name() const {
+	return itsLongName;
+}
+std::string git::reference::get_short_name() const {
+	return itsShortName;
+}
+
 int git::reference::compare(git::reference& other) {
 	return git_reference_cmp(this->get_reference(), other.get_reference());
 }
