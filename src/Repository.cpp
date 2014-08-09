@@ -30,7 +30,15 @@ void Repository::open(std::string path) {
 		} else if (!error) {
 			itsHeadName = std::string(git_reference_shorthand(itsHead));
 		}
-		
+
+		git_strarray refs = { 0 };
+		int error = git_reference_list(&refs, itsRepository);
+
+		int count = refs.count;
+		for (int i = 0; i < refs.count; i++) {
+			printf("%s\n", refs.strings[i]);
+		}
+
 		/*
 		git_status_list* statusList = nullptr;
 		git_status_options o = GIT_STATUS_OPTIONS_INIT;
