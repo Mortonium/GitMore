@@ -1,4 +1,6 @@
-#include "Repository.hpp"
+#include "repository.hpp"
+
+#include "reference.hpp"
 
 git::repository::repository() {
 
@@ -22,6 +24,8 @@ void git::repository::open(std::string path) {
 
 		itsPath = path;
 
+
+
 		error = git_repository_head(&itsHead, itsRepository);
 		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND) {
 			const git_error *e = giterr_last();
@@ -31,13 +35,18 @@ void git::repository::open(std::string path) {
 			itsHeadName = std::string(git_reference_shorthand(itsHead));
 		}
 
+
+
 		git_strarray refs = { 0 };
 		int error = git_reference_list(&refs, itsRepository);
 
 		int count = refs.count;
 		for (int i = 0; i < refs.count; i++) {
-			printf("%s\n", refs.strings[i]);
+			reference* r = new reference(*this, refs.strings[i]);
+			itsReferences.push_back(r);
 		}
+		
+
 
 		/*
 		git_status_list* statusList = nullptr;

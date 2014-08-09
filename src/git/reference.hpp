@@ -22,7 +22,7 @@ namespace git {
 
 		reference(repository& repository);
 		reference(repository& repository, std::string name);
-		virtual ~reference() = 0;
+		virtual ~reference();
 
 		int compare(git::reference& other);
 

@@ -3,8 +3,11 @@
 #include <git2.h>
 
 #include <string>
+#include <vector>
 
 namespace git {
+
+	class reference;
 
 	class repository {
 		friend class reference;
@@ -25,6 +28,7 @@ namespace git {
 
 		std::string itsPath;
 		std::string itsHeadName;
+		std::vector<reference*> itsReferences;
 
 		git_repository* get_repository();
 
