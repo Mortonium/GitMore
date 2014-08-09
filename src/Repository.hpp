@@ -18,7 +18,9 @@ public:
 
 private:
 	git_repository* itsRepository = nullptr;
+	git_reference* itsHead = nullptr;
 
 	std::string itsPath;
+	std::string itsHeadName;
 
 };

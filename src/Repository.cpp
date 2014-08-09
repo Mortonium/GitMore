@@ -22,21 +22,21 @@ void Repository::open(std::string path) {
 	if (!error) {
 		itsRepository = newRepo;
 		itsPath = path;
-		
-		/*
+
+
 		int error = 0;
 		git_reference *head = NULL;
 
-		error = git_repository_head(&head, itsCurrentRepo);
+		error = git_repository_head(&head, itsRepository);
 
-		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND)
-			itsCurrentBranch = "";
-		else if (!error) {
-			itsCurrentBranch = std::string(git_reference_shorthand(head));
+		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND) {
+			const git_error *e = giterr_last();
+			printf("Error %d/%d: %s\n", error, e->klass, e->message);
+			exit(error);
+		} else if (!error) {
+			itsHead = head;
+			itsHeadName = std::string(git_reference_shorthand(head));
 		}
-
-		git_reference_free(head);
-		*/
 
 		/*
 		git_status_list* statusList = nullptr;
@@ -56,9 +56,16 @@ void Repository::open(std::string path) {
 
 }
 void Repository::close() {
+
 	git_repository_free(itsRepository);
-	itsPath = "";
+	git_reference_free(itsHead);
+
 	itsRepository = nullptr;
+	itsHead = nullptr;
+
+	itsPath = "";
+	itsHeadName = "";
+
 }
 
 std::string Repository::getPath() {
