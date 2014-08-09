@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace git {
 
@@ -28,7 +29,7 @@ namespace git {
 
 		std::string itsPath;
 		std::string itsHeadName;
-		std::vector<reference*> itsReferences;
+		std::map<std::string, reference*> itsReferences;
 
 		git_repository* get_repository();
 

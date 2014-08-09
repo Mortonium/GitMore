@@ -43,10 +43,10 @@ void git::repository::open(std::string path) {
 		int count = refs.count;
 		for (int i = 0; i < refs.count; i++) {
 			reference* r = new reference(*this, refs.strings[i]);
-			itsReferences.push_back(r);
+			itsReferences[r->get_long_name()] = r;
 		}
 		
-
+		
 
 		/*
 		git_status_list* statusList = nullptr;
