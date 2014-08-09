@@ -72,3 +72,11 @@ void git::repository::close() {
 std::string git::repository::getPath() {
 	return itsPath;
 }
+
+
+
+
+
+git_repository* git::repository::get_repository() {
+	return itsRepository;
+}

@@ -25,6 +25,8 @@ namespace git {
 		std::string itsPath;
 		std::string itsHeadName;
 
+		git_repository* get_repository();
+
 	};
 
 }
