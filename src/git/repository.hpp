@@ -8,7 +8,7 @@
 
 namespace git {
 
-	class reference;
+	class branch;
 
 	class repository {
 		friend class reference;
@@ -29,7 +29,7 @@ namespace git {
 
 		std::string itsPath;
 		std::string itsHeadName;
-		std::map<std::string, reference*> itsReferences;
+		std::map<std::string, branch*> itsBranches;
 
 		git_repository* get_repository();
 

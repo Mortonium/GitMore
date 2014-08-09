@@ -1,6 +1,6 @@
 #include "repository.hpp"
 
-#include "reference.hpp"
+#include "branch.hpp"
 
 git::repository::repository() {
 
@@ -37,15 +37,21 @@ void git::repository::open(std::string path) {
 
 
 
-		git_strarray refs = { 0 };
-		int error = git_reference_list(&refs, itsRepository);
+		git_reference_iterator * ref_iter = nullptr;
+		git_reference_iterator_new(&ref_iter, itsRepository);
+		git_reference *ref = NULL;
+		while (!(error = git_reference_next(&ref, ref_iter))) {
+			if (git_reference_is_branch(ref)) {
+				branch* b = new branch(*this, ref);
+				itsBranches[b->get_branch_name()] = b;
+			} else if (git_reference_is_remote(ref)) {
 
-		int count = refs.count;
-		for (int i = 0; i < refs.count; i++) {
-			reference* r = new reference(*this, refs.strings[i]);
-			itsReferences[r->get_long_name()] = r;
+			} else if (git_reference_is_tag(ref)) {
+				
+			} // else if (git_reference_is_note(itsReference)) {
+			// itsType = type::note;
+			// }
 		}
-		
 		
 
 		/*
