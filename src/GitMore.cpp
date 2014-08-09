@@ -126,7 +126,7 @@ void GitMore::draw() {
 
 	case GitMoreState::None:
 		if (itsCurrentRepository) {
-			mvprintw(0, 0, itsCurrentRepository->getPath().c_str());
+			mvprintw(0, 0, itsCurrentRepository->get_path().c_str());
 			//mvprintw(1, 0, "## %s\n", itsCurrentRepository->getCurrentBranchName()/.length() ? itsCurrentBranch.c_str() : "HEAD (no branch)");
 		}
 		break;

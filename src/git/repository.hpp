@@ -16,7 +16,7 @@ namespace git {
 		void open(std::string path);
 		void close();
 
-		std::string getPath();
+		std::string get_path();
 
 	private:
 		git_repository* itsRepository = nullptr;
