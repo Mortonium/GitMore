@@ -14,6 +14,14 @@ git::reference::reference(repository& repository, std::string name) : itsReposit
 		itsLongName = std::string(git_reference_name(itsReference));
 		itsShortName = std::string(git_reference_shorthand(itsReference));
 		git_reference_name_to_id(&itsOID, itsRepository.get_repository(), itsLongName.c_str());
+		if (git_reference_is_branch(itsReference))
+			itsType = type::branch;
+		// else if (git_reference_is_note(itsReference))
+			// itsType = type::note;
+		else if (git_reference_is_remote(itsReference))
+			itsType = type::remote;
+		else if (git_reference_is_tag(itsReference))
+			itsType = type::tag;
 	} else {
 		const git_error *e = giterr_last();
 		printf("Error %d/%d: %s\n", error, e->klass, e->message);
@@ -26,6 +34,9 @@ git::reference::~reference() {
 		git_reference_free(itsReference);
 }
 
+git::reference::type git::reference::get_type() {
+	return itsType;
+}
 std::string git::reference::get_long_name() const {
 	return itsLongName;
 }

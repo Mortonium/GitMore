@@ -15,7 +15,7 @@ namespace git {
 	public:
 		enum class type {
 			branch,
-			note,
+			// note,
 			remote,
 			tag
 		};
@@ -24,6 +24,7 @@ namespace git {
 		reference(repository& repository, std::string name);
 		virtual ~reference();
 
+		type get_type();
 		std::string get_long_name() const;
 		std::string get_short_name() const;
 
@@ -40,6 +41,7 @@ namespace git {
 		repository& itsRepository;
 		git_reference* itsReference = nullptr;
 
+		type itsType;
 		git_oid itsOID;
 		std::string itsLongName;
 		std::string itsShortName;
