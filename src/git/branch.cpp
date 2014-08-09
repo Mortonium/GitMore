@@ -10,14 +10,11 @@ git::branch::branch(repository& repo, git_reference* ref) : reference(repo, ref)
 		printf("Branch not a branch\n");
 		exit(1);
 	} else {
-
+		
 	}
 
 }
 
-std::string git::branch::get_branch_name() {
-	return itsBranchName;
-}
 git::branch* git::branch::get_upstream() {
 	return itsUpstream;
 }

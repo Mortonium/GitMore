@@ -43,7 +43,7 @@ void git::repository::open(std::string path) {
 		while (!(error = git_reference_next(&ref, ref_iter))) {
 			if (git_reference_is_branch(ref)) {
 				branch* b = new branch(*this, ref);
-				itsBranches[b->get_branch_name()] = b;
+				itsBranches[b->get_short_name()] = b;
 			} else if (git_reference_is_remote(ref)) {
 
 			} else if (git_reference_is_tag(ref)) {
@@ -53,6 +53,7 @@ void git::repository::open(std::string path) {
 			// }
 		}
 		
+
 
 		/*
 		git_status_list* statusList = nullptr;

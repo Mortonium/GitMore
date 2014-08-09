@@ -16,11 +16,9 @@ namespace git {
 		branch(repository& repo);
 		branch(repository& repo, git_reference* ref);
 
-		std::string get_branch_name();
 		branch* get_upstream();
 
 	private:
-		std::string itsBranchName;
 		branch* itsUpstream = nullptr;
 
 	};

@@ -3,7 +3,7 @@
 git::reference::reference(repository& repository) : itsRepository(repository) {
 	
 }
-git::reference::reference(repository& repository, git_reference* ref) : itsRepository(repository) {
+git::reference::reference(repository& repository, git_reference* ref) : itsRepository(repository), itsReference(ref) {
 	
 	if (ref) {
 		itsLongName = std::string(git_reference_name(itsReference));
