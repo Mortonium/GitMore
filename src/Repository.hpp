@@ -12,6 +12,7 @@ public:
 	~Repository();
 
 	void open(std::string path);
+	void close();
 
 	std::string getPath();
 
