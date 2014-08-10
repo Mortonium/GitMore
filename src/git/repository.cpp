@@ -26,15 +26,6 @@ void git::repository::open(std::string path) {
 
 
 
-		// Get head reference
-		git_reference* head_ref = nullptr;
-		error = git_repository_head(&head_ref, itsRepository);
-		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND) {
-			const git_error *e = giterr_last();
-			printf("Error %d/%d: %s\n", error, e->klass, e->message);
-			exit(error);
-		}
-
 		// Iterate and interpret all references
 		git_reference_iterator* ref_iter = nullptr;
 		git_reference_iterator_new(&ref_iter, itsRepository);
@@ -43,7 +34,7 @@ void git::repository::open(std::string path) {
 			if (git_reference_is_branch(ref)) {
 				branch* b = new branch(*this, ref);
 				itsBranches[b->get_short_name()] = b;
-				if (git_reference_cmp(ref, head_ref)) {
+				if (git_branch_is_head(ref)) {
 					its_head = b;
 				}
 			} else if (git_reference_is_remote(ref)) {
@@ -55,7 +46,6 @@ void git::repository::open(std::string path) {
 			// }
 		}
 
-		git_reference_free(head_ref);
 		git_reference_iterator_free(ref_iter);
 		
 
