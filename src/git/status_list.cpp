@@ -12,6 +12,16 @@ git::status_list::~status_list() {
 	close();
 }
 
+int git::status_list::get_num_file_additions() {
+	return its_num_file_additions;
+}
+int git::status_list::get_num_file_modifications() {
+	return its_num_file_modifications
+}
+int git::status_list::get_num_file_deletions() {
+	return its_num_file_deletions;
+}
+
 void git::status_list::open(git_status_list* status_list) {
 	
 	its_git_status_list = status_list;
