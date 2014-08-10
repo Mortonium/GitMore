@@ -9,7 +9,7 @@
 #include <queue>
 #include <git2.h>
 
-#include "Repository.hpp"
+#include "git/repository.hpp"
 
 #include "Settings.hpp"
 #include "CLI.hpp"
@@ -38,7 +38,7 @@ public:
 private:
 	std::thread* itsThread = nullptr;
 	std::atomic<GitMoreState> itsState{ GitMoreState::None };
-	Repository* itsCurrentRepository = nullptr;
+	git::repository* itsCurrentRepository = nullptr;
 	Settings itsSettings;
 
 	std::queue<int> itsInputQueue;
