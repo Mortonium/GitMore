@@ -14,22 +14,22 @@
 #include "Settings.hpp"
 #include "CLI.hpp"
 
-enum class GitMoreState {
-	None,
-	Closing,
-	CommandInput
+enum class gitmore_state {
+	none,
+	closing,
+	command_input
 };
 
-class GitMore {
+class gitmore {
 
 public:
-	GitMore();
-	~GitMore();
+	gitmore();
+	~gitmore();
 
 	void run();
 	void waitForThreadFinish();
 
-	GitMoreState getState() const;
+	gitmore_state getState() const;
 
 	void keyPress(int chr);
 
@@ -37,7 +37,7 @@ public:
 
 private:
 	std::thread* itsThread = nullptr;
-	std::atomic<GitMoreState> itsState{ GitMoreState::None };
+	std::atomic<gitmore_state> itsState{ gitmore_state::none };
 	git::repository* itsCurrentRepository = nullptr;
 	Settings itsSettings;
 
@@ -48,7 +48,7 @@ private:
 
 
 
-	void setState(GitMoreState s);
+	void setState(gitmore_state s);
 
 	void main();
 	void interpretKeyPress(int ch);
