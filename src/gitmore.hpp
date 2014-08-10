@@ -46,6 +46,8 @@ private:
 
 	CLI its_CLI;
 
+	WINDOW* its_header_window = nullptr;
+
 
 
 	void set_state(gitmore_state s);
@@ -60,5 +62,10 @@ private:
 	void interpret_command(std::string command_string);
 
 	void draw();
+
+	void draw_header();
+	void draw_header_repo();
+	void draw_header_branch();
+	void draw_header_change();
 
 };
