@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 
+#include "status_list.hpp"
+
 namespace git {
 
 	class branch;
@@ -30,6 +32,7 @@ namespace git {
 		std::string itsPath;
 		std::string itsHeadName;
 		std::map<std::string, branch*> itsBranches;
+		status_list itsStatusList;
 
 		git_repository* get_repository();
 
