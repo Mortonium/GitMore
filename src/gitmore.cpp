@@ -6,19 +6,19 @@ gitmore::gitmore() {
 	
 }
 gitmore::~gitmore() {
-	if (itsThread) {
-		delete itsThread;
+	if (its_thread) {
+		delete its_thread;
 	}
 }
 
 void gitmore::run() {
-	if (!itsThread) {
-		itsThread = new std::thread(&gitmore::main, this);
+	if (!its_thread) {
+		its_thread = new std::thread(&gitmore::main, this);
 	}
 }
-void gitmore::waitForThreadFinish() {
+void gitmore::wait_for_thread_finish() {
 	try {
-		if (itsThread && itsThread->joinable()) itsThread->join();
+		if (its_thread && its_thread->joinable()) its_thread->join();
 	} catch (std::invalid_argument ex) {
 		std::cerr << "Thread unjoinable, no biggy" << std::endl;
 	} catch (std::exception ex) {
@@ -26,48 +26,48 @@ void gitmore::waitForThreadFinish() {
 	}
 }
 
-gitmore_state gitmore::getState() const {
-	return itsState;
+gitmore_state gitmore::get_state() const {
+	return its_state;
 }
-void gitmore::keyPress(int chr) {
-	itsInputQueueMutex.lock();
-	itsInputQueue.push(chr);
-	itsInputQueueMutex.unlock();
+void gitmore::key_press(int chr) {
+	its_input_queue_mutex.lock();
+	its_input_queue.push(chr);
+	its_input_queue_mutex.unlock();
 }
 
 
 
 
 
-void gitmore::setState(gitmore_state s) {
-	itsState = s;
+void gitmore::set_state(gitmore_state s) {
+	its_state = s;
 }
 
 void gitmore::main() {
 
 	git_threads_init();
-	setCurrentRepo("E:/Repos/TestRepo/");
+	set_current_repo("E:/Repos/TestRepo/");
 	
-	while (itsState != gitmore_state::closing) {
+	while (its_state != gitmore_state::closing) {
 
-		itsInputQueueMutex.lock();
-		if (itsInputQueue.empty())
-			itsInputQueueMutex.unlock(); 
+		its_input_queue_mutex.lock();
+		if (its_input_queue.empty())
+			its_input_queue_mutex.unlock(); 
 		else {
 
-			std::queue<int> cachedInputQueue = itsInputQueue;
-			while (!itsInputQueue.empty()) itsInputQueue.pop();
-			itsInputQueueMutex.unlock();
+			std::queue<int> cached_input_queue = its_input_queue;
+			while (!its_input_queue.empty()) its_input_queue.pop();
+			its_input_queue_mutex.unlock();
 
-			while (cachedInputQueue.size() > 0) {
-				int temp = cachedInputQueue.front();
-				interpretKeyPress(cachedInputQueue.front());
-				cachedInputQueue.pop();
+			while (cached_input_queue.size() > 0) {
+				int temp = cached_input_queue.front();
+				interpret_key_press(cached_input_queue.front());
+				cached_input_queue.pop();
 			}
 
-			if (itsState == gitmore_state::command_input) {
-				if (itsCLI.finished()) {
-					executeCommandString(itsCLI.getCommand());
+			if (its_state == gitmore_state::command_input) {
+				if (its_CLI.finished()) {
+					execute_command_string(its_CLI.getCommand());
 				}
 			}
 
@@ -78,61 +78,61 @@ void gitmore::main() {
 	}
 	
 }
-void gitmore::interpretKeyPress(int ch) {
+void gitmore::interpret_key_press(int ch) {
 	if (ch == 27) {
-		setState(gitmore_state::closing);
+		set_state(gitmore_state::closing);
 	} else {
-		if (itsState == gitmore_state::none) {
+		if (its_state == gitmore_state::none) {
 			if (ch == 9) { // TAB
-				setState(gitmore_state::command_input);
-				itsCLI.init();
+				set_state(gitmore_state::command_input);
+				its_CLI.init();
 			}
-		} else if (itsState == gitmore_state::command_input) {
-			itsCLI.keyPress(ch);
+		} else if (its_state == gitmore_state::command_input) {
+			its_CLI.keyPress(ch);
 		}
 	}
 }
 
-void gitmore::setCurrentRepo(std::string path) {
+void gitmore::set_current_repo(std::string path) {
 
-	git::repository* newRepo = new git::repository(path);
-	closeCurrentRepo();
-	itsCurrentRepository = newRepo;
+	git::repository* new_repo = new git::repository(path);
+	close_current_repo();
+	its_current_repository = new_repo;
 
 	draw();
 
 }
-void gitmore::closeCurrentRepo() {
-	if (itsCurrentRepository) {
-		delete itsCurrentRepository;
-		itsCurrentRepository = nullptr;
+void gitmore::close_current_repo() {
+	if (its_current_repository) {
+		delete its_current_repository;
+		its_current_repository = nullptr;
 	}
 }
 
-void gitmore::executeCommandString(std::string commandString) {
+void gitmore::execute_command_string(std::string commandString) {
 	mvprintw(0, 0, commandString.c_str());
 	refresh();
 }
-void gitmore::interpretCommand(std::string commandString) {
+void gitmore::interpret_command(std::string commandString) {
 	
 }
 
 void gitmore::draw() {
 	clear();
 
-	std::string closeMessage = "Closing";
+	std::string close_message = "Closing";
 
-	switch (itsState) {
+	switch (its_state) {
 
 	case gitmore_state::none:
-		if (itsCurrentRepository) {
-			mvprintw(0, 0, itsCurrentRepository->get_path().c_str());
+		if (its_current_repository) {
+			mvprintw(0, 0, its_current_repository->get_path().c_str());
 			//mvprintw(1, 0, "## %s\n", itsCurrentRepository->getCurrentBranchName()/.length() ? itsCurrentBranch.c_str() : "HEAD (no branch)");
 		}
 		break;
 		
 	case gitmore_state::closing:
-		mvprintw(getmaxy(stdscr) / 2, (getmaxx(stdscr) / 2) - (closeMessage.length() / 2), closeMessage.c_str());
+		mvprintw(getmaxy(stdscr) / 2, (getmaxx(stdscr) / 2) - (close_message.length() / 2), close_message.c_str());
 		break;
 
 	case gitmore_state::command_input:

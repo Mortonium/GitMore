@@ -27,37 +27,37 @@ public:
 	~gitmore();
 
 	void run();
-	void waitForThreadFinish();
+	void wait_for_thread_finish();
 
-	gitmore_state getState() const;
+	gitmore_state get_state() const;
 
-	void keyPress(int chr);
+	void key_press(int chr);
 
 
 
 private:
-	std::thread* itsThread = nullptr;
-	std::atomic<gitmore_state> itsState{ gitmore_state::none };
-	git::repository* itsCurrentRepository = nullptr;
-	Settings itsSettings;
+	std::thread* its_thread = nullptr;
+	std::atomic<gitmore_state> its_state{ gitmore_state::none };
+	git::repository* its_current_repository = nullptr;
+	Settings its_settings;
 
-	std::queue<int> itsInputQueue;
-	std::mutex itsInputQueueMutex;
+	std::queue<int> its_input_queue;
+	std::mutex its_input_queue_mutex;
 
-	CLI itsCLI;
+	CLI its_CLI;
 
 
 
-	void setState(gitmore_state s);
+	void set_state(gitmore_state s);
 
 	void main();
-	void interpretKeyPress(int ch);
+	void interpret_key_press(int ch);
 
-	void setCurrentRepo(std::string path);
-	void closeCurrentRepo();
+	void set_current_repo(std::string path);
+	void close_current_repo();
 
-	void executeCommandString(std::string commandString);
-	void interpretCommand(std::string commandString);
+	void execute_command_string(std::string command_string);
+	void interpret_command(std::string command_string);
 
 	void draw();
 

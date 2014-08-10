@@ -25,12 +25,12 @@ int main(int argc, char** argv) {
 	while (!exit) {
 		int ch = getch();
 		if (ch >= 0)
-			gm.keyPress(ch);
-		exit = gm.getState() == gitmore_state::closing;
+			gm.key_press(ch);
+		exit = gm.get_state() == gitmore_state::closing;
 	}
 
 	endwin();
-	gm.waitForThreadFinish();
+	gm.wait_for_thread_finish();
 	return 0;
 
 }
