@@ -24,6 +24,10 @@ namespace git {
 
 		std::vector<status_entry*> its_status_entries;
 
+		int its_num_file_additions = 0;
+		int its_num_file_modifications = 0;
+		int its_num_file_deletions = 0;
+
 	};
 
 }
