@@ -22,7 +22,7 @@ namespace git {
 	private:
 		git_status_list* its_git_status_list = nullptr;
 
-		std::vector<status_entry> its_status_entries;
+		std::vector<status_entry*> its_status_entries;
 
 	};
 

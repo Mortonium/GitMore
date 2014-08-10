@@ -2,6 +2,8 @@
 
 #include <git2.h>
 
+#include "diff_delta.hpp"
+
 namespace git{
 
 	class status_entry {
@@ -27,9 +29,12 @@ namespace git{
 
 		status_entry();
 		status_entry(const git_status_entry* status_entry);
+		~status_entry();
 
 	private:
-		type itsType;
+		type its_type;
+		diff_delta* its_head_to_index = nullptr;
+		diff_delta* its_index_to_workdir = nullptr;
 
 	};
 

@@ -56,19 +56,13 @@ void git::repository::open(std::string path) {
 
 
 		
-		git_status_list* statusList = nullptr;
+		git_status_list* g_status_list = nullptr;
 		git_status_options o = GIT_STATUS_OPTIONS_INIT;
 		o.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
 		o.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_RENAMES_HEAD_TO_INDEX | GIT_STATUS_OPT_SORT_CASE_SENSITIVELY;
-		git_status_list_new(&statusList, itsRepository, 0);
+		git_status_list_new(&g_status_list, itsRepository, 0);
 
-		
-
-		
-		
-
-
-		int t = 0;
+		itsStatusList = status_list(g_status_list);
 
 	} else {
 		const git_error *e = giterr_last();
