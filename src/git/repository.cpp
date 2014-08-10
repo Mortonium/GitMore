@@ -77,11 +77,14 @@ void git::repository::close() {
 
 }
 
-std::string git::repository::get_path() {
+const std::string git::repository::get_path() {
 	return itsPath;
 }
 const git::branch* git::repository::get_head() {
 	return its_head;
+}
+const git::status_list& git::repository::get_status() {
+	return itsStatusList;
 }
 
 
