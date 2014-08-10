@@ -16,9 +16,9 @@ namespace git {
 		status_list(git_status_list* status_list);
 		~status_list();
 
-		int get_num_file_additions();
-		int get_num_file_modifications();
-		int get_num_file_deletions();
+		int get_num_file_additions() const;
+		int get_num_file_modifications() const;
+		int get_num_file_deletions() const;
 
 		void open(git_status_list* status_list);
 		void close();

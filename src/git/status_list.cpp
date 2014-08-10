@@ -12,13 +12,13 @@ git::status_list::~status_list() {
 	close();
 }
 
-int git::status_list::get_num_file_additions() {
+int git::status_list::get_num_file_additions() const {
 	return its_num_file_additions;
 }
-int git::status_list::get_num_file_modifications() {
-	return its_num_file_modifications
+int git::status_list::get_num_file_modifications() const {
+	return its_num_file_modifications;
 }
-int git::status_list::get_num_file_deletions() {
+int git::status_list::get_num_file_deletions() const {
 	return its_num_file_deletions;
 }
 
