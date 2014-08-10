@@ -20,3 +20,7 @@ git::status_entry::~status_entry() {
 	if (its_index_to_workdir)
 		delete its_index_to_workdir;
 }
+
+git::status_entry::type git::status_entry::get_type() {
+	return its_type;
+}

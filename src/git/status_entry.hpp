@@ -31,6 +31,8 @@ namespace git{
 		status_entry(const git_status_entry* status_entry);
 		~status_entry();
 
+		type get_type();
+
 	private:
 		type its_type;
 		diff_delta* its_head_to_index = nullptr;
