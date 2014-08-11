@@ -23,14 +23,15 @@ namespace git {
 		void open(std::string path);
 		void close();
 
-		std::string get_path();
+		const std::string get_path();
+		const branch* get_head();
+		const status_list& get_status();
 
 	private:
 		git_repository* itsRepository = nullptr;
-		git_reference* itsHead = nullptr;
 
 		std::string itsPath;
-		std::string itsHeadName;
+		branch* its_head = nullptr;
 		std::map<std::string, branch*> itsBranches;
 		status_list itsStatusList;
 

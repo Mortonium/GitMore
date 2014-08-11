@@ -26,24 +26,17 @@ void git::repository::open(std::string path) {
 
 
 
-		error = git_repository_head(&itsHead, itsRepository);
-		if (error == GIT_EUNBORNBRANCH || error == GIT_ENOTFOUND) {
-			const git_error *e = giterr_last();
-			printf("Error %d/%d: %s\n", error, e->klass, e->message);
-			exit(error);
-		} else if (!error) {
-			itsHeadName = std::string(git_reference_shorthand(itsHead));
-		}
-
-
-
-		git_reference_iterator * ref_iter = nullptr;
+		// Iterate and interpret all references
+		git_reference_iterator* ref_iter = nullptr;
 		git_reference_iterator_new(&ref_iter, itsRepository);
-		git_reference *ref = NULL;
+		git_reference* ref = NULL;
 		while (!(error = git_reference_next(&ref, ref_iter))) {
 			if (git_reference_is_branch(ref)) {
 				branch* b = new branch(*this, ref);
 				itsBranches[b->get_short_name()] = b;
+				if (git_branch_is_head(ref)) {
+					its_head = b;
+				}
 			} else if (git_reference_is_remote(ref)) {
 
 			} else if (git_reference_is_tag(ref)) {
@@ -52,6 +45,8 @@ void git::repository::open(std::string path) {
 			// itsType = type::note;
 			// }
 		}
+
+		git_reference_iterator_free(ref_iter);
 		
 
 
@@ -74,18 +69,22 @@ void git::repository::open(std::string path) {
 void git::repository::close() {
 
 	git_repository_free(itsRepository);
-	git_reference_free(itsHead);
 
 	itsRepository = nullptr;
-	itsHead = nullptr;
 
 	itsPath = "";
-	itsHeadName = "";
+	its_head = nullptr;
 
 }
 
-std::string git::repository::get_path() {
+const std::string git::repository::get_path() {
 	return itsPath;
+}
+const git::branch* git::repository::get_head() {
+	return its_head;
+}
+const git::status_list& git::repository::get_status() {
+	return itsStatusList;
 }
 
 

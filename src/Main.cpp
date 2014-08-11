@@ -4,7 +4,7 @@
 #include <exception>
 #include <iostream>
 
-#include "GitMore.hpp"
+#include "gitmore.hpp"
 
 int main(int argc, char** argv) {
 	
@@ -18,19 +18,19 @@ int main(int argc, char** argv) {
 		start_color();
 	timeout(1000);
 	
-	GitMore gitmore;
-	gitmore.run();
+	gitmore gm;
+	gm.run();
 
 	bool exit = false;
 	while (!exit) {
 		int ch = getch();
 		if (ch >= 0)
-			gitmore.keyPress(ch);
-		exit = gitmore.getState() == GitMoreState::Closing;
+			gm.key_press(ch);
+		exit = gm.get_state() == gitmore_state::closing;
 	}
 
 	endwin();
-	gitmore.waitForThreadFinish();
+	gm.wait_for_thread_finish();
 	return 0;
 
 }
